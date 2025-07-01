@@ -108,42 +108,60 @@ class Snake(GameObject):
             pygame.draw.rect(screen, (0, 0, 0), last_rect)
 
 
+def handle_quit_event(event):
+    """Обрабатывает событие выхода из игры."""
+    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+        pygame.quit()
+        raise SystemExit
+    return False
+
+
+def handle_direction_change(event, game_object):
+    """Обрабатывает изменение направления движения змейки."""
+    direction_map = {
+        pygame.K_UP: (0, -1),
+        pygame.K_DOWN: (0, 1),
+        pygame.K_LEFT: (-1, 0),
+        pygame.K_RIGHT: (1, 0)
+    }
+    opposite_directions = {
+        (0, -1): (0, 1),
+        (0, 1): (0, -1),
+        (-1, 0): (1, 0),
+        (1, 0): (-1, 0)
+    }
+    if event.key in direction_map:
+        new_direction = direction_map[event.key]
+        if game_object.direction != opposite_directions.get(new_direction, None):
+            game_object.next_direction = new_direction
+            return True
+    return False
+
+
+def handle_pause():
+    """Обрабатывает паузу в игре."""
+    paused = True
+    while paused:
+        for e in pygame.event.get():
+            if handle_quit_event(e):
+                return
+            if (e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE):
+                paused = False
+
+
 def handle_keys(game_object):
     """Обрабатывает нажатия клавиш для управления змейкой.
     Args:
         game_object: Объект змейки, которым управляем.
     """
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            raise SystemExit
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                raise SystemExit
-            elif (event.key == pygame.K_UP 
-                  and game_object.direction != (0, 1)):
-                game_object.next_direction = (0, -1) 
-            elif (event.key == pygame.K_DOWN 
-                  and game_object.direction != (0, -1)):
-                game_object.next_direction = (0, 1)
-            elif (event.key == pygame.K_LEFT 
-                  and game_object.direction != (1, 0)):
-                game_object.next_direction = (-1, 0)
-            elif (event.key == pygame.K_RIGHT 
-                  and game_object.direction != (-1, 0)):
-                game_object.next_direction = (1, 0)
-            elif event.key == pygame.K_SPACE:
-                # Пауза при нажатии пробела
-                paused = True
-                while paused:
-                    for e in pygame.event.get():
-                        if e.type == pygame.QUIT:
-                            pygame.quit()
-                            raise SystemExit
-                        if (e.type == pygame.KEYDOWN 
-                                and e.key == pygame.K_SPACE):
-                            paused = False
+        if handle_quit_event(event):
+            continue
+        if event.type == pygame.KEYDOWN:
+            if handle_direction_change(event, game_object):
+                continue
+            if event.key == pygame.K_SPACE:
+                handle_pause()
 
 
 def main():
