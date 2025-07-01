@@ -110,7 +110,6 @@ class Snake(GameObject):
 
 def handle_keys(game_object):
     """Обрабатывает нажатия клавиш для управления змейкой.
- 
     Args:
         game_object: Объект змейки, которым управляем.
     """
@@ -119,18 +118,32 @@ def handle_keys(game_object):
             pygame.quit()
             raise SystemExit
         elif event.type == pygame.KEYDOWN:
-            if (event.key == pygame.K_UP 
-                    and game_object.direction != (0, 1)):
-                game_object.next_direction = (0, -1)
-            elif event.key == pygame.K_DOWN 
-                    and game_object.direction != (0, -1):
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                raise SystemExit
+            elif (event.key == pygame.K_UP 
+                  and game_object.direction != (0, 1)):
+                game_object.next_direction = (0, -1) 
+            elif (event.key == pygame.K_DOWN 
+                  and game_object.direction != (0, -1)):
                 game_object.next_direction = (0, 1)
-            elif event.key == pygame.K_LEFT 
-                    and game_object.direction != (1, 0):
+            elif (event.key == pygame.K_LEFT 
+                  and game_object.direction != (1, 0)):
                 game_object.next_direction = (-1, 0)
-            elif event.key == pygame.K_RIGHT 
-                    and game_object.direction != (-1, 0):
+            elif (event.key == pygame.K_RIGHT 
+                  and game_object.direction != (-1, 0)):
                 game_object.next_direction = (1, 0)
+            elif event.key == pygame.K_SPACE:
+                # Пауза при нажатии пробела
+                paused = True
+                while paused:
+                    for e in pygame.event.get():
+                        if e.type == pygame.QUIT:
+                            pygame.quit()
+                            raise SystemExit
+                        if (e.type == pygame.KEYDOWN 
+                                and e.key == pygame.K_SPACE):
+                            paused = False
 
 
 def main():
