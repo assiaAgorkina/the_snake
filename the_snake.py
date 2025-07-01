@@ -35,8 +35,7 @@ class Apple(GameObject):
         )
 
     def draw(self, screen):
-        """Отрисовывает яблоко на игровой поверхности.
-        """
+        """Отрисовывает яблоко на игровой поверхности."""
         rect = pygame.Rect(self.position, (20, 20))
         pygame.draw.rect(screen, self.body_color, rect)
         pygame.draw.rect(screen, (93, 216, 228), rect, 1)
@@ -88,8 +87,7 @@ class Snake(GameObject):
         self.direction = choice([(0, -1), (0, 1), (-1, 0), (1, 0)])
 
     def draw(self, screen):
-        """Отрисовывает змейку на экране.
-        """
+        """Отрисовывает змейку на экране."""
         for position in self.positions[:-1]:
             rect = pygame.Rect(position, (20, 20))
             pygame.draw.rect(screen, self.body_color, rect)
@@ -106,8 +104,9 @@ class Snake(GameObject):
 
 def handle_quit_event(event):
     """Обрабатывает событие выхода из игры."""
-    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and 
-                  event.key == pygame.K_ESCAPE):
+    if (event.type == pygame.QUIT
+            or (event.type == pygame.KEYDOWN
+                and event.key == pygame.K_ESCAPE)):
         pygame.quit()
         raise SystemExit
     return False
@@ -129,7 +128,7 @@ def handle_direction_change(event, game_object):
     }
     if event.key in direction_map:
         new_direction = direction_map[event.key]
-        if game_object.direction != opposite_directions.get(new_direction, None):
+        if game_object.direction != opposite_directions.get(new_direction):
             game_object.next_direction = new_direction
             return True
     return False
@@ -142,14 +141,13 @@ def handle_pause():
         for e in pygame.event.get():
             if handle_quit_event(e):
                 return
-            if (e.type == pygame.KEYDOWN and 
-                     e.key == pygame.K_SPACE):
+            if (e.type == pygame.KEYDOWN
+                    and e.key == pygame.K_SPACE):
                 paused = False
 
 
 def handle_keys(game_object):
-    """Обрабатывает нажатия клавиш для управления змейкой.
-    """
+    """Обрабатывает нажатия клавиш для управления змейкой."""
     for event in pygame.event.get():
         if handle_quit_event(event):
             continue
