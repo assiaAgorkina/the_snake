@@ -36,8 +36,7 @@ class Apple(GameObject):
 
     def draw(self, screen):
         """Отрисовывает яблоко на игровой поверхности.
-        
-        Args:
+            Args:
             screen: Поверхность для отрисовки.
         """
         rect = pygame.Rect(self.position, (20, 20))
@@ -92,7 +91,6 @@ class Snake(GameObject):
 
     def draw(self, screen):
         """Отрисовывает змейку на экране.
-        
         Args:
             screen: Поверхность для отрисовки.
         """
@@ -112,7 +110,7 @@ class Snake(GameObject):
 
 def handle_keys(game_object):
     """Обрабатывает нажатия клавиш для управления змейкой.
-    
+ 
     Args:
         game_object: Объект змейки, которым управляем.
     """
@@ -121,13 +119,17 @@ def handle_keys(game_object):
             pygame.quit()
             raise SystemExit
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and game_object.direction != (0, 1):
+            if (event.key == pygame.K_UP 
+                    and game_object.direction != (0, 1)):
                 game_object.next_direction = (0, -1)
-            elif event.key == pygame.K_DOWN and game_object.direction != (0, -1):
+            elif event.key == pygame.K_DOWN 
+                    and game_object.direction != (0, -1):
                 game_object.next_direction = (0, 1)
-            elif event.key == pygame.K_LEFT and game_object.direction != (1, 0):
+            elif event.key == pygame.K_LEFT 
+                    and game_object.direction != (1, 0):
                 game_object.next_direction = (-1, 0)
-            elif event.key == pygame.K_RIGHT and game_object.direction != (-1, 0):
+            elif event.key == pygame.K_RIGHT 
+                    and game_object.direction != (-1, 0):
                 game_object.next_direction = (1, 0)
 
 
